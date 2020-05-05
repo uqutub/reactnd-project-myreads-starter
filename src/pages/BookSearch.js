@@ -8,7 +8,8 @@ export class BookSearch extends Component {
     }
 
     inputChangeHandler = ({ target: { name, value } }) => {
-        this.setState({ [name]: value })
+        this.setState({ [name]: value });
+        this.props.search(value);
     }
 
     render() {
@@ -22,7 +23,29 @@ export class BookSearch extends Component {
                     </div>
                 </div>
                 <div className="search-books-results">
-                    <ol className="books-grid"></ol>
+                    <ol className="books-grid">
+                        {this.state.searchText ? this.props.books.filter((book) => (book.hasOwnProperty('imageLinks'))).map((book) => (
+                            <li key={book.id}>
+                                <div className="book">
+                                    <div className="book-top">
+                                        <div className="book-cover"
+                                            style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
+                                        <div className="book-shelf-changer">
+                                            <select onChange={({ target: { value } }) => this.props.changeShelf(book, value)} defaultValue={book.shelf}>
+                                                <option value="move" disabled>Move to...</option>
+                                                <option value="currentlyReading">Currently Reading</option>
+                                                <option value="wantToRead">Want to Read</option>
+                                                <option value="read">Read</option>
+                                                <option value="none">None</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="book-title">{book.title}</div>
+                                    <div className="book-authors">{book.authors}</div>
+                                </div>
+                            </li>
+                        )) : null}
+                    </ol>
                 </div>
             </div>
         );
