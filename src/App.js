@@ -11,6 +11,10 @@ class App extends React.Component {
   };
 
   componentDidMount() {
+    this.getAllBooks();
+  }
+
+  getAllBooks = () => {
     BooksAPI.getAll()
       .then((books) => {
         this.setState({ books });
@@ -30,7 +34,6 @@ class App extends React.Component {
     BooksAPI.search(query)
       .then((books) => {
         if (books.error) {
-          console.log(books.items)
           this.updateSearchBooks(books.items);
           return
         }
@@ -49,7 +52,11 @@ class App extends React.Component {
   }
 
   shelfChangeHandler = (book, shelf) => {
-    console.log(book, shelf);
+    BooksAPI.update(book, shelf).then(() => {
+      this.getAllBooks();
+    }).catch((e) => {
+      console.log('error: ', e);
+    });
   }
 
   render() {
