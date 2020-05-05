@@ -63,7 +63,10 @@ class App extends React.Component {
     return (
       <Fragment>
         <Route exact path='/' render={() => (
-          <BookList />
+          <BookList
+            books={this.state.books}
+            changeShelf={this.shelfChangeHandler}
+          />
         )}
         />
         <Route exact path='/search' render={() => (
